@@ -313,16 +313,11 @@ function submitChoice(picked){
  $("answerText").textContent=correct?(isCorrect?"Bạn đã chọn đúng đáp án "+correct+".":"Bạn chọn "+picked+". Đáp án đúng là "+correct+"."):"Tài liệu hiện tại chưa xác định được chữ cái đáp án đúng cho câu này.";
  studyFeedback(item,picked,isCorrect);
  $("checkBtn").textContent="Đã trả lời";
+ $("checkBtn").disabled=true;
+ choices.querySelectorAll('input[type="radio"]').forEach(input=>input.disabled=true);
  renderGrid();
- const answeredSet=setNo,answeredQuestion=current;
- // Keep feedback visible long enough to read. The user can also use the Next button.
- advanceTimer=setTimeout(()=>{
-   if(setNo!==answeredSet||current!==answeredQuestion)return;
-   const idx=order.indexOf(current);
-   if(idx>=0&&idx<order.length-1){current=order[idx+1];render();}
-   else {advanceTimer=null;return;}
-   advanceTimer=null;
- },5000);
+ // Không tự chuyển câu: người học đọc đáp án và mẹo giải thích,
+ // chỉ chuyển sang câu khác khi bấm nút “Câu tiếp →”.
 }
 function checkAnswer(){
  const item=list().find(x=>x.n===current); if(!item)return;
@@ -336,7 +331,7 @@ function checkAnswer(){
  $("answerBox").classList.remove("hidden");
  $("answerText").textContent=correct?(isCorrect?"Bạn đã chọn đúng đáp án "+correct+".":"Bạn chọn "+picked+". Đáp án đúng là "+correct+"."):"Tài liệu hiện tại chưa xác định được chữ cái đáp án đúng cho câu này.";
  studyFeedback(item,picked,isCorrect);
- $("checkBtn").textContent="Đã kiểm tra";
+ $("checkBtn").textContent="Đã kiểm tra";$("checkBtn").disabled=true;
  $("choices").querySelectorAll(".choice").forEach(el=>{
    const letter=el.dataset.letter;
    el.classList.remove("correct","wrong");
@@ -352,7 +347,8 @@ function render(){
  $("sourceLabel").textContent="Trắc nghiệm · 1 điểm/câu";
  $("questionText").textContent=item.q;
  $("answerText").textContent=item.a;
- $("answerBox").classList.add("hidden");$("checkBtn").textContent="Kiểm tra đáp án";
+ $("answerBox").classList.toggle("hidden",!s.lastPicked);$("checkBtn").textContent=s.lastPicked?"Đã trả lời":"Kiểm tra đáp án";$("checkBtn").disabled=!!s.lastPicked;
+ if(s.lastPicked){const correct=item.correct_letter||null;$("answerText").textContent=correct?(s.lastCorrect?"Bạn đã chọn đúng đáp án "+correct+".":"Bạn chọn "+s.lastPicked+". Đáp án đúng là "+correct+"."):"Tài liệu hiện tại chưa xác định được chữ cái đáp án đúng cho câu này.";studyFeedback(item,s.lastPicked,s.lastCorrect);}
  $("markBtn").textContent=s.review?"✓ Đang cần ôn":"Đánh dấu cần ôn";$("markBtn").className=s.review?"danger":"gold";
  const choices=$("choices");choices.innerHTML="";
  const opts=item.options||{}; const letters=Object.keys(opts).sort();
@@ -360,9 +356,10 @@ function render(){
    letters.forEach(letter=>{
      const label=document.createElement("label");label.className="choice";label.dataset.letter=letter;
      const radio=document.createElement("input");radio.type="radio";radio.name="choice";radio.value=letter;radio.checked=(selected[key()]||"")===letter;
-     radio.onchange=()=>{selected[key()]=letter;choices.querySelectorAll(".choice").forEach(c=>c.classList.toggle("selected",c.dataset.letter===letter));submitChoice(letter)};
+     radio.disabled=!!s.lastPicked;
+     radio.onchange=()=>{if(stateFor(key()).lastPicked)return;selected[key()]=letter;choices.querySelectorAll(".choice").forEach(c=>c.classList.toggle("selected",c.dataset.letter===letter));submitChoice(letter)};
      const span=document.createElement("span");span.textContent=letter+". "+opts[letter];
-     label.append(radio,span);if(radio.checked)label.classList.add("selected");choices.appendChild(label);
+     label.append(radio,span);if(radio.checked)label.classList.add("selected");if(s.lastPicked&&letter===item.correct_letter)label.classList.add("correct");if(s.lastPicked&&letter===s.lastPicked&&s.lastCorrect===false)label.classList.add("wrong");choices.appendChild(label);
    });
  }else{
    choices.innerHTML='<div class="notice">Chưa trích xuất đủ phương án lựa chọn từ PDF cho câu này. Không có phương án nào được tự tạo; hãy đối chiếu trực tiếp với file PDF gốc.</div>';
