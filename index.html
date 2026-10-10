@@ -155,6 +155,18 @@ hr{border-color:#e8eef4!important}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
+
+<style id="vbi-compact-question-fonts">
+/* Thu nhỏ nhẹ chữ ở khu vực làm bài, giữ nguyên khả năng đọc trên điện thoại. */
+#questionText { font-size: .96em; line-height: 1.55; }
+#choices .choice { font-size: .94em; line-height: 1.5; }
+#choices .choice span { font-size: inherit; }
+#qLabel { font-size: .92em; }
+@media (max-width: 600px) {
+  #questionText { font-size: .94em; }
+  #choices .choice { font-size: .92em; }
+}
+</style>
 </head><body>
 <header><h1>VBI NEW · Luyện thi bảo hiểm</h1><p>8 bộ đề · Ôn tập đáp án · Theo dõi câu cần học lại</p></header>
 <main>
