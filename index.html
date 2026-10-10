@@ -21,6 +21,19 @@ button{border:0;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:
 .tip{padding:13px;border:1px solid var(--line);border-radius:12px;margin:10px 0}.tip h3{font-size:16px;margin:0 0 4px}
 footer{font-size:12px;color:var(--muted);margin-top:20px}
 @media(max-width:760px){.layout{grid-template-columns:1fr}.navgrid{grid-template-columns:repeat(10,1fr)}header{padding:20px 16px}.question{font-size:17px}.stats{grid-template-columns:repeat(3,1fr)}}
+
+/* Readability and answer feedback improvements */
+.question{font-size:clamp(23px,2.3vw,29px)!important;line-height:1.65!important;font-weight:800!important;margin:14px 0 24px!important}
+.choices{gap:13px!important;margin:20px 0!important}
+.choice{padding:16px 18px!important;font-size:18px!important;line-height:1.65!important;border-radius:14px!important}
+.choice input{width:19px;height:19px;flex:0 0 auto;margin-top:7px!important}
+.choice.selected{padding:15px 17px!important}
+.answer{font-size:17px;line-height:1.7;padding:18px!important}
+.feedback-correct{background:#eaf8ef;border:1px solid #8bd0a5;border-radius:12px;padding:14px;margin-top:12px}
+.feedback-wrong{background:#fff5e9;border:1px solid #f0c27a;border-radius:12px;padding:14px;margin-top:12px}
+.feedback-title{font-size:18px;font-weight:800;margin-bottom:6px}
+.feedback-tip{background:#f5f8fb;border-left:4px solid var(--blue);padding:12px 14px;border-radius:8px;margin-top:12px}
+@media(max-width:760px){.question{font-size:22px!important}.choice{font-size:17px!important;padding:14px!important}}
 </style><style id="vbi-refresh-fix">
 /* UI refresh: remove the legacy data notice and clearly distinguish question states */
 .notice{display:none!important}
@@ -50,7 +63,7 @@ footer{font-size:12px;color:var(--muted);margin-top:20px}
 <div class="between"><span class="qnum" id="qLabel">BỘ ĐỀ 01 · CÂU 1</span><span class="muted" id="sourceLabel"></span></div>
 <div class="question" id="questionText"></div>
 <div id="choices" class="choices"></div><div class="row"><button class="primary" id="checkBtn">Kiểm tra đáp án</button><button class="gold" id="markBtn">Đánh dấu cần ôn</button></div>
-<div class="answer hidden" id="answerBox"><strong>Đáp án theo tài liệu nguồn</strong><div id="answerText"></div></div>
+<div class="answer hidden" id="answerBox"><strong>ĐÁP ÁN VÀ GIẢI THÍCH</strong><div id="answerText"></div><div id="feedbackDetail"></div></div>
 <div class="row between" style="margin-top:22px"><button class="secondary" id="prevBtn">← Câu trước</button><span class="muted" id="counter"></span><button class="primary" id="nextBtn">Câu tiếp →</button></div>
 <div class="navgrid" id="questionGrid"></div>
 <p class="muted">Mẹo học: đọc câu hỏi, tự trả lời trước khi bấm “Hiện đáp án”, sau đó đánh dấu câu chưa nhớ.</p>
@@ -109,6 +122,18 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>switchView(b.dataset.
 function move(delta){let idx=order.indexOf(current);if(idx<0)idx=0;idx=Math.max(0,Math.min(order.length-1,idx+delta));current=order[idx];shown=false;render()}
 function switchView(view,btn){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));["study","review","tips","stats"].forEach(v=>$(v+"View").classList.toggle("hidden",v!==view));const extraTips=document.getElementById("set1TipsView");if(extraTips)extraTips.classList.toggle("hidden",view!=="tips");if(view==="review")renderReview();if(view==="stats")renderStats()}
 let advanceTimer=null;
+function studyFeedback(item,picked,isCorrect){
+ const correct=item.correct_letter||null;
+ const correctText=correct&&item.options?item.options[correct]:"";
+ const detail=$("feedbackDetail");
+ if(isCorrect){
+  detail.innerHTML='<div class="feedback-correct"><div class="feedback-title">✓ Chính xác!</div><div>Bạn đã chọn đúng phương án '+escapeHtml(correct)+'.</div></div>';
+  return;
+ }
+ const sourceTip=(setNo==="1"&&typeof SET1_TIP_TEXT!=="undefined")?SET1_TIP_TEXT[item.n]:"";
+ const tip=sourceTip||"Đọc lại chính xác phần câu hỏi, xác định từ khóa phủ định (nếu có), chủ thể được hỏi và điều kiện đi kèm. So sánh từng phương án với câu chữ trong tài liệu nguồn; không chọn chỉ vì phương án nghe hợp lý. Phần mẹo riêng cho câu này chưa có đủ dữ liệu nguồn để xác nhận.";
+ detail.innerHTML='<div class="feedback-wrong"><div class="feedback-title">✗ Chưa chính xác</div><div><strong>Đáp án đúng theo dữ liệu bộ đề:</strong> '+escapeHtml(correct||"Chưa xác định được chữ cái")+(correctText?'. '+escapeHtml(correctText):"")+'</div></div><div class="feedback-tip"><strong>Mẹo chọn lại</strong><div>'+escapeHtml(tip)+'</div></div>';
+}
 function submitChoice(picked){
  const item=list().find(x=>x.n===current);if(!item)return;
  if(advanceTimer)clearTimeout(advanceTimer);
@@ -124,17 +149,19 @@ function submitChoice(picked){
    if(correct&&letter===picked&&picked!==correct)el.classList.add("wrong");
  });
  $("answerBox").classList.remove("hidden");
- $("answerText").textContent=correct?((isCorrect?"Chính xác! ":"Chưa chính xác. ")+ "Đáp án đúng: "+correct+". "+item.a):("Đã ghi nhận lựa chọn. Tài liệu chưa xác định được chữ cái đáp án đúng cho câu này: "+item.a);
+ $("answerText").textContent=correct?(isCorrect?"Bạn đã chọn đúng đáp án "+correct+".":"Bạn chọn "+picked+". Đáp án đúng là "+correct+"."):"Tài liệu hiện tại chưa xác định được chữ cái đáp án đúng cho câu này.";
+ studyFeedback(item,picked,isCorrect);
  $("checkBtn").textContent="Đã trả lời";
  renderGrid();
  const answeredSet=setNo,answeredQuestion=current;
+ // Keep feedback visible long enough to read. The user can also use the Next button.
  advanceTimer=setTimeout(()=>{
    if(setNo!==answeredSet||current!==answeredQuestion)return;
    const idx=order.indexOf(current);
    if(idx>=0&&idx<order.length-1){current=order[idx+1];render();}
-   else {renderGrid();$("answerText").textContent=correct?(isCorrect?"Chính xác! Đã hoàn thành câu cuối của bộ đề.":"Đáp án chưa chính xác. Đã hoàn thành câu cuối của bộ đề."):"Đã hoàn thành câu cuối. Câu này chưa có đáp án đúng xác định trong dữ liệu.";}
+   else {advanceTimer=null;return;}
    advanceTimer=null;
- },850);
+ },5000);
 }
 function checkAnswer(){
  const item=list().find(x=>x.n===current); if(!item)return;
@@ -146,7 +173,8 @@ function checkAnswer(){
  state[key()]={...stateFor(key()),seen:true,lastPicked:picked,lastCorrect:isCorrect};
  save();
  $("answerBox").classList.remove("hidden");
- $("answerText").textContent=correct?((isCorrect?"Chính xác! ":"Chưa chính xác. ")+"Đáp án đúng: "+correct+". "+item.a):("Đáp án chữ cái chưa xác định trong tài liệu. "+item.a);
+ $("answerText").textContent=correct?(isCorrect?"Bạn đã chọn đúng đáp án "+correct+".":"Bạn chọn "+picked+". Đáp án đúng là "+correct+"."):"Tài liệu hiện tại chưa xác định được chữ cái đáp án đúng cho câu này.";
+ studyFeedback(item,picked,isCorrect);
  $("checkBtn").textContent="Đã kiểm tra";
  $("choices").querySelectorAll(".choice").forEach(el=>{
    const letter=el.dataset.letter;
