@@ -254,7 +254,7 @@ hr{border-color:#e8eef4!important}
  #nextBtn{justify-self:end!important}
  #prevBtn,#nextBtn{font-size:12px!important;padding:8px 10px!important;min-height:38px!important;white-space:nowrap!important}
 }
-</style><style id="vbi-hide-detailed-analysis-final">#feedbackDetail,.question-diagnosis,.feedback-detail{display:none!important}#clearHistoryBtn{background:#fff1f0;color:#a52727;border:1px solid #f2c2bf}</style></head><body>
+</style><style id="vbi-hide-detailed-analysis-final">#feedbackDetail,.question-diagnosis,.feedback-detail{display:none!important}</style></head><body>
 <header><h1>VBI NEW · Luyện thi bảo hiểm</h1><p>8 bộ đề · Ôn tập đáp án · Theo dõi câu cần học lại</p></header>
 <main>
 <div class="tabs">
@@ -270,7 +270,7 @@ hr{border-color:#e8eef4!important}
 <div id="setChoices" class="set-choices" role="group" aria-label="Chọn bộ đề"></div>
 <div class="stats"><div class="stat"><strong id="total">60</strong><span class="muted">Câu</span></div><div class="stat"><strong id="learned">0</strong><span class="muted">Đã xem</span></div><div class="stat"><strong id="marked">0</strong><span class="muted">Ôn lại</span></div></div>
 <div class="progress"><div id="progressBar"></div></div><p class="muted" id="progressText">0% đã ôn</p>
-<div class="row"><button class="secondary" id="shuffleBtn">Xáo trộn câu hỏi</button><button class="secondary" id="resetBtn">Bỏ đánh dấu bộ đề</button><button class="danger" id="clearHistoryBtn">Xóa lịch sử trả lời bộ đề</button></div>
+<div class="row"><button class="secondary" id="shuffleBtn">Xáo trộn câu hỏi</button><button class="secondary" id="resetBtn">Bỏ đánh dấu bộ đề</button></div>
 <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
 <h2>Điều kiện mục tiêu</h2><p class="muted">Mốc tham chiếu bài thi: 50/60 điểm · 1 điểm/câu.</p>
 <button class="primary" id="startStudyBtn">Bắt đầu ôn tập →</button>
@@ -350,14 +350,6 @@ function init(){
    label.append(input,text); setChoices.appendChild(label);
    input.addEventListener("change",()=>{
      if(!input.checked){input.checked=true;return}
-     const previousSet=String(setNo);
-     if(previousSet!==String(n)){
-       const clearPrevious=confirm("Xóa lịch sử các câu đã chọn của Bộ đề "+String(previousSet).padStart(2,"0")+"?");
-       if(clearPrevious){
-         listForSet(previousSet).forEach(item=>{const k=previousSet+":"+item.n;if(state[k]){delete state[k].lastPicked;delete state[k].lastCorrect;delete state[k].seen;}});
-         save();
-       }
-     }
      setChoices.querySelectorAll('input[type="checkbox"]').forEach(other=>{if(other!==input)other.checked=false});
      setNo=n;current=1;order=list().map(x=>x.n);render();
    });
@@ -368,11 +360,7 @@ function init(){
  $("prevBtn").onclick=()=>move(-1);$("nextBtn").onclick=()=>move(1);
  $("shuffleBtn").onclick=()=>{order=list().map(x=>x.n).sort(()=>Math.random()-.5);current=order[0]||1;render()};
  $("resetBtn").onclick=()=>{if(confirm("Bỏ toàn bộ dấu cần ôn của bộ đề này?")){list().forEach(x=>{let k=setNo+":"+x.n;if(state[k])state[k].review=false});save();render()}};
- $("clearHistoryBtn").onclick=()=>{
-   if(!confirm("Xóa lịch sử trả lời của toàn bộ câu trong Bộ đề "+String(setNo).padStart(2,"0")+"? Thao tác này giữ lại dấu câu cần ôn."))return;
-   list().forEach(item=>{const k=setNo+":"+item.n;if(state[k]){delete state[k].lastPicked;delete state[k].lastCorrect;delete state[k].seen;}});
-   save();render();
- };
+
  
 const set1TipSelect=document.getElementById("set1TipSelect");
 if(set1TipSelect&&BANK["1"]){set1TipSelect.innerHTML=BANK["1"].items.map(x=>'<option value="'+x.n+'">Câu '+x.n+'</option>').join("");set1TipSelect.addEventListener("change",set1RenderTip);set1RenderTip();}
