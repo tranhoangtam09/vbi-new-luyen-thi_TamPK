@@ -279,7 +279,7 @@ hr{border-color:#e8eef4!important}
 <div class="between"><span class="qnum" id="qLabel">BỘ ĐỀ 01 · CÂU 1</span><span class="muted" id="sourceLabel"></span></div>
 <div class="question" id="questionText"></div>
 <div id="choices" class="choices"></div><div class="row"><button class="primary" id="checkBtn">Kiểm tra đáp án</button><button class="gold" id="markBtn">Đánh dấu cần ôn</button></div>
-<div class="answer hidden" id="answerBox"><strong>ĐÁP ÁN VÀ GIẢI THÍCH</strong><div id="answerText"></div><div id="feedbackDetail"></div></div>
+<div class="answer hidden" id="answerBox"><strong>ĐÁP ÁN</strong><div id="answerText"></div></div>
 <div class="row between" style="margin-top:22px"><button class="secondary" id="prevBtn">← Câu trước</button><span class="muted" id="counter"></span><button class="primary" id="nextBtn">Câu tiếp →</button></div>
 <div class="navgrid" id="questionGrid"></div>
 <p class="muted">Chọn đáp án, đọc phản hồi rồi bấm “Câu tiếp →” để tiếp tục.</p>
@@ -403,19 +403,11 @@ function questionReason(item,letter){
  return {option,pattern,group:rules[0].name,tip:rules[0].tip,other:rules.slice(1).map(x=>x.name)};
 }
 function studyFeedback(item,picked,isCorrect){
- const correct=item.correct_letter||null;
- const correctText=correct&&item.options?item.options[correct]:"";
+ // Giữ phần phản hồi ngắn gọn; không hiển thị khung “Phân tích nhanh câu này”.
  const detail=$("feedbackDetail");
- const info=questionReason(item,correct);
- if(isCorrect){
-  detail.innerHTML='<div class="feedback-correct"><div class="feedback-title">✓ Chính xác!</div><div>Bạn đã chọn đúng phương án '+escapeHtml(correct)+'.</div><div class="muted">Nhóm mẹo: '+escapeHtml(info.group)+'</div><div class="feedback-tip"><strong>Ghi nhớ:</strong> '+escapeHtml(info.tip)+'</div></div>';
-  return;
- }
- const sourceTip=(setNo==="1"&&typeof SET1_TIP_TEXT!=="undefined")?SET1_TIP_TEXT[item.n]:"";
- const tip=sourceTip||info.tip;
- const other=info.other.length?'<p class="muted">Nhóm liên quan: '+info.other.map(escapeHtml).join(" · ")+'</p>':"";
- detail.innerHTML='<div class="feedback-wrong"><div class="feedback-title">✗ Chưa chính xác</div><div><strong>Đáp án theo tài liệu bộ đề:</strong> '+escapeHtml(correct||"Chưa xác định được chữ cái")+(correctText?'. '+escapeHtml(correctText):"")+'</div></div><div class="question-diagnosis"><h4>Phân tích nhanh câu này</h4><p><strong>Nhóm mẹo:</strong> '+escapeHtml(info.group)+'</p><p>'+escapeHtml(info.pattern)+'</p><p><strong>Mẹo chọn lại:</strong> '+escapeHtml(tip)+'</p>'+other+(sourceTip?'<p><strong>Ghi chú theo câu:</strong> '+escapeHtml(sourceTip)+'</p>':"")+'</div>';
+ if(detail)detail.innerHTML="";
 }
+
 function submitChoice(picked){
  const item=list().find(x=>x.n===current);if(!item)return;
  if(advanceTimer)clearTimeout(advanceTimer);
