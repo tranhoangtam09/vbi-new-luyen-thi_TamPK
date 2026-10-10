@@ -107,7 +107,7 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>switchView(b.dataset.
  order=list().map(x=>x.n);render();
 }
 function move(delta){let idx=order.indexOf(current);if(idx<0)idx=0;idx=Math.max(0,Math.min(order.length-1,idx+delta));current=order[idx];shown=false;render()}
-function switchView(view,btn){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));["study","review","tips","stats"].forEach(v=>$(v+"View").classList.toggle("hidden",v!==view));if(view==="review")renderReview();if(view==="stats")renderStats()}
+function switchView(view,btn){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));["study","review","tips","stats"].forEach(v=>$(v+"View").classList.toggle("hidden",v!==view));const extraTips=document.getElementById("set1TipsView");if(extraTips)extraTips.classList.toggle("hidden",view!=="tips");if(view==="review")renderReview();if(view==="stats")renderStats()}
 function checkAnswer(){
  const item=list().find(x=>x.n===current); if(!item)return;
  const picked=selected[key()]||"";
