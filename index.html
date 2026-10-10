@@ -350,8 +350,25 @@ function init(){
    label.append(input,text); setChoices.appendChild(label);
    input.addEventListener("change",()=>{
      if(!input.checked){input.checked=true;return}
-     setChoices.querySelectorAll('input[type="checkbox"]').forEach(other=>{if(other!==input)other.checked=false});
-     setNo=n;current=1;order=list().map(x=>x.n);render();
+     const previousSet=String(setNo);
+     const nextSet=String(n);
+     if(previousSet!==nextSet){
+       // Xóa lịch sử trả lời của bộ đề vừa rời đi để câu cũ không còn màu đúng/sai.
+       listForSet(previousSet).forEach(item=>{
+         const k=previousSet+":"+item.n;
+         if(state[k]){
+           delete state[k].lastPicked;
+           delete state[k].lastCorrect;
+           delete state[k].seen;
+         }
+       });
+       save();
+       setChoices.querySelectorAll('input[type="checkbox"]').forEach(other=>{if(other!==input)other.checked=false});
+       setNo=nextSet;current=1;order=list().map(x=>x.n);
+       render();
+     }else{
+       setChoices.querySelectorAll('input[type="checkbox"]').forEach(other=>{other.checked=String(other.value)===nextSet});
+     }
    });
  });
 
