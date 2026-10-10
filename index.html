@@ -59,6 +59,102 @@ footer{font-size:12px;color:var(--muted);margin-top:20px}
 .navgrid button.answered.review{background:#fff1d6!important;color:#7a4b00!important;border-color:#f0a323!important}
 .choice.selected{border:2px solid #1769aa!important;background:#eaf4ff!important;box-shadow:0 0 0 3px #1769aa14!important;font-weight:650}
 </style>
+
+<style id="vbi-modern-ui">
+:root{
+ --navy:#102a43;--blue:#1769aa;--gold:#f3b640;--bg:#f4f7fb;--ink:#14283d;--muted:#64778b;--line:#dbe5ef;
+ --green:#17834f;--red:#bd302b;--surface:#fff;--surface-soft:#f7faff;--shadow:0 12px 32px rgba(18,45,72,.07);
+ --radius:20px;
+}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse at 15% 0%,rgba(207,228,249,.5),transparent 36%),var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6}
+header{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(120deg,#0d2944 0%,#104d7b 58%,#1877b8 100%);padding:28px max(22px,calc((100% - 1240px)/2));box-shadow:0 8px 28px rgba(10,43,71,.16)}
+header:after{content:"";position:absolute;z-index:-1;width:320px;height:320px;border:1px solid rgba(255,255,255,.15);border-radius:50%;right:7%;top:-195px;box-shadow:0 0 0 35px rgba(255,255,255,.035),0 0 0 75px rgba(255,255,255,.025)}
+header h1{font-size:clamp(25px,3.2vw,36px);font-weight:850;letter-spacing:-.035em;line-height:1.2}
+header p{font-size:14px;letter-spacing:.015em;color:#dceeff;margin-top:9px}
+main{max-width:1280px;margin:26px auto;padding:0 22px 60px}
+.tabs{position:sticky;top:10px;z-index:20;display:flex;gap:7px;flex-wrap:wrap;padding:7px;margin-bottom:20px;border:1px solid rgba(213,225,237,.95);border-radius:16px;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);box-shadow:0 8px 24px rgba(17,47,76,.06)}
+.tab{padding:10px 16px;border-radius:11px;background:transparent;color:#52677b;font-size:14px;font-weight:750;transition:background .18s,color .18s,transform .18s}
+.tab:hover{background:#edf4fa;color:var(--navy)}
+.tab.active{background:var(--navy);color:#fff;box-shadow:0 4px 12px rgba(16,42,67,.2)}
+.layout{grid-template-columns:290px minmax(0,1fr);gap:20px;align-items:start}
+.panel,.card{background:rgba(255,255,255,.97);border:1px solid #e0e8f0;border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+#studyView>aside{position:sticky;top:88px}
+h2{font-size:18px;font-weight:800;letter-spacing:-.02em;color:#193650;margin:0 0 15px}
+h3{letter-spacing:-.015em}
+label{font-size:13px;color:#4d6378;font-weight:750;margin:14px 0 7px}
+select,input[type=search]{min-height:44px;padding:11px 13px;border:1px solid #d2deea;border-radius:12px;background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+select:focus,input[type=search]:focus{border-color:#6aa6d7;box-shadow:0 0 0 4px rgba(23,105,170,.11)}
+button{border-radius:12px;padding:10px 15px;font-size:14px;font-weight:750;transition:transform .15s,box-shadow .15s,background .15s}
+button:active{transform:translateY(1px)}
+button:focus-visible{outline:3px solid rgba(23,105,170,.35);outline-offset:2px}
+.primary{background:linear-gradient(135deg,#1769aa,#13588f);color:white;box-shadow:0 4px 10px rgba(23,105,170,.17)}
+.primary:hover{background:linear-gradient(135deg,#135d99,#104a79);box-shadow:0 6px 15px rgba(23,105,170,.23);transform:translateY(-1px)}
+.secondary{background:#edf4fa;color:#214966;border:1px solid #e0ebf4}
+.secondary:hover{background:#e0edf7}
+.gold{background:#fff5dd;color:#75500b;border:1px solid #f6e4b6}
+.danger{background:#fff0ef;color:#a32824;border:1px solid #f5d1cf}
+.row{gap:9px}
+.stats{gap:9px;margin:16px 0}
+.stat{padding:13px 8px;background:linear-gradient(180deg,#f8fbfe,#f1f6fb);border:1px solid #e5edf5;border-radius:14px}
+.stat strong{font-size:24px;letter-spacing:-.04em;color:#174d79}
+.stat .muted{font-size:12px}
+.progress{height:9px;background:#e8eff6;border-radius:99px;margin:12px 0}
+.progress div{background:linear-gradient(90deg,#f4b83f,#f7d47b);border-radius:99px;transition:width .25s ease}
+.qnum{display:inline-flex;align-items:center;gap:6px;background:#edf5fc;border:1px solid #dcecf9;border-radius:99px;padding:6px 10px;color:#155d92;font-size:11px;letter-spacing:.09em}
+.question{font-size:clamp(23px,2.2vw,30px)!important;font-weight:780;line-height:1.48!important;letter-spacing:-.025em;color:#152e45;margin:18px 0 24px}
+#sourceLabel{font-size:12px;text-align:right}
+.choices{gap:11px;margin:18px 0 22px}
+.choice{position:relative;gap:13px;padding:15px 16px;border:1px solid #dfe7ef;border-radius:15px;background:#fff;line-height:1.55;transition:border-color .15s,background .15s,box-shadow .15s,transform .15s}
+.choice:hover{border-color:#a9c8e2;background:#fbfdff;box-shadow:0 5px 16px rgba(22,65,102,.06);transform:translateY(-1px)}
+.choice input{accent-color:#1769aa;flex:0 0 auto;width:17px;height:17px;margin-top:5px}
+.choice.selected{padding:14px 15px;border:2px solid #277bb8;background:#f0f7fd;box-shadow:0 0 0 3px rgba(39,123,184,.08);font-weight:700}
+.choice.correct{border:2px solid #29935d;background:#effaf3;color:#145c37}
+.choice.wrong{border:2px solid #d44f49;background:#fff4f3;color:#922d28}
+.answer{border-radius:16px;background:#f0faf4;border:1px solid #ccebd7;padding:17px;margin-top:17px}
+.answer>strong{display:block;font-size:12px;letter-spacing:.1em;color:#197247;margin-bottom:8px}
+.feedback-correct,.feedback-wrong,.feedback-tip,.question-diagnosis{border-radius:13px}
+.question-diagnosis{background:#f2f8fd;border:1px solid #d4e7f7;padding:16px;margin-top:14px}
+.question-diagnosis h4{font-size:15px;margin-bottom:9px}
+.navgrid{grid-template-columns:repeat(10,minmax(0,1fr));gap:7px;margin-top:20px;padding-top:18px;border-top:1px solid #e8eef4}
+.navgrid button{min-height:38px;border-radius:10px;padding:5px 0;font-size:12px;background:#f6f9fc;border-color:#e4ebf2}
+.navgrid button.current{background:#102a43;color:#fff;border-color:#102a43;box-shadow:0 0 0 3px rgba(23,105,170,.16)}
+.navgrid button.answered{background:#e7f3fd;color:#155d92;border-color:#bddcf3}
+.navgrid button.correct-answer{background:#e3f6e9!important;color:#17683a!important;border-color:#91d3a8!important}
+.navgrid button.wrong-answer{background:#fff0ef!important;color:#a4231d!important;border-color:#edaaa6!important}
+.navgrid button.review{outline:2px solid #e6a62d;outline-offset:1px}
+.tip,.tip-group{border:1px solid #e0e9f1;border-radius:15px;padding:17px;margin:12px 0;background:#fff;box-shadow:0 4px 15px rgba(16,42,67,.025)}
+.tip h3,.tip-group h3{font-size:16px;font-weight:800;color:#193e5d}
+.tip-group .tag{background:#edf5fc;color:#165b8c;font-size:11px;letter-spacing:.04em}
+.notice{background:#fff8e9;border:1px solid #f5e4bc;border-left:4px solid #efb43f;border-radius:12px}
+#reviewList>*,#statsView>*{margin-bottom:12px}
+footer{color:#7c8b9a}
+hr{border-color:#e8eef4!important}
+::selection{background:#d8ebfa;color:#123c5c}
+@media(min-width:761px){#studyView>aside{top:88px}}
+@media(max-width:900px){main{max-width:100%;padding:0 16px 42px}.layout{grid-template-columns:250px minmax(0,1fr);gap:14px}.panel,.card{padding:17px}}
+@media(max-width:760px){
+ header{padding:23px 18px}
+ header h1{font-size:25px}
+ main{margin:14px auto;padding:0 12px 36px}
+ .tabs{position:relative;top:auto;gap:5px;padding:5px;border-radius:14px}
+ .tab{flex:1 1 calc(50% - 5px);padding:10px 8px;font-size:13px}
+ .layout{grid-template-columns:minmax(0,1fr);gap:13px}
+ #studyView>aside{position:static}
+ .panel,.card{padding:16px;border-radius:17px}
+ .question{font-size:22px!important;line-height:1.5!important;margin:16px 0 20px}
+ .choice{padding:13px;border-radius:13px}
+ .choice.selected{padding:12px}
+ .stats{gap:7px}
+ .stat{padding:10px 5px}
+ .stat strong{font-size:22px}
+ .navgrid{grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+ .navgrid button{min-height:40px;font-size:13px}
+ #studyView>section>.row.between{gap:8px}
+ #studyView>section>.row.between button{padding:10px 11px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
 </head><body>
 <header><h1>VBI NEW · Luyện thi bảo hiểm</h1><p>8 bộ đề · Ôn tập đáp án · Theo dõi câu cần học lại</p></header>
 <main>
