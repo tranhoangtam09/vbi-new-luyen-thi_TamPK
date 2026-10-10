@@ -167,6 +167,21 @@ hr{border-color:#e8eef4!important}
   #choices .choice { font-size: .92em; }
 }
 </style>
+
+<style id="vbi-mobile-question-fit">
+/* Ưu tiên hiển thị trọn câu hỏi trên màn hình điện thoại */
+@media (max-width: 600px) {
+  main { margin: 10px auto; padding: 0 9px 28px; }
+  .panel, .card { padding: 12px; border-radius: 12px; }
+  #questionText { font-size: 14px !important; line-height: 1.38 !important; overflow-wrap: anywhere; }
+  #choices .choice { font-size: 13px !important; line-height: 1.35 !important; padding: 9px 10px !important; gap: 7px; }
+  #choices .choice span { font-size: 13px !important; line-height: 1.35 !important; }
+  #qLabel { font-size: 12px !important; }
+  #sourceLabel, #counter, .muted { font-size: 11px; }
+  #questionText { margin-top: 8px; margin-bottom: 10px; }
+  #choices { gap: 7px; }
+}
+</style>
 </head><body>
 <header><h1>VBI NEW · Luyện thi bảo hiểm</h1><p>8 bộ đề · Ôn tập đáp án · Theo dõi câu cần học lại</p></header>
 <main>
