@@ -15,7 +15,7 @@ button{border:0;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:
 .progress{height:8px;background:#e5edf4;border-radius:99px;overflow:hidden;margin:10px 0}.progress div{height:100%;background:var(--gold);width:0}
 .qnum{color:var(--blue);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.06em}.question{font-size:19px;font-weight:700;margin:8px 0 20px;white-space:normal}
 .choices{display:grid;gap:9px;margin:14px 0}.choice{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:11px;cursor:pointer;background:#fff}.choice input{margin-top:5px}.choice.selected{border-color:var(--blue);background:#eef6fc}.choice.correct{border-color:#80c99a;background:#eff8f2}.choice.wrong{border-color:#e4a09b;background:#fff1f0}.answer{padding:14px;border-radius:12px;background:#eff8f2;border:1px solid #c8e6d2;margin-top:14px}.answer strong{color:var(--green)}.hidden{display:none!important}
-.navgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:14px}.navgrid button{padding:7px 0;background:#eef3f7;color:#34495e}.navgrid button.current{background:var(--blue);color:white}.navgrid button.review{outline:2px solid #e0a125}
+.navgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:14px}.navgrid button{padding:8px 0;background:#f1f5f9;color:#34495e;border:1px solid #e0e8f0;transition:transform .15s,box-shadow .15s,background .15s}.navgrid button:hover{transform:translateY(-1px);box-shadow:0 3px 10px #103c6818}.navgrid button.current{background:var(--navy);color:white;border-color:var(--navy);box-shadow:0 0 0 3px #1769aa24}.navgrid button.answered{background:#e5f3ff;color:#075985;border-color:#91caff;font-weight:800}.navgrid button.review{outline:2px solid #f0a323;outline-offset:1px;position:relative}.navgrid button.answered.review{background:#fff1d6;color:#7a4b00;border-color:#f0a323}.choice{transition:border-color .15s,background .15s,box-shadow .15s}.choice:hover{border-color:#7caad0;box-shadow:0 3px 12px #103c6810}.choice.selected{border:2px solid var(--blue);background:#eaf4ff;box-shadow:0 0 0 3px #1769aa14;padding:11px;font-weight:650}.choice.correct{border-color:#22945b;background:#e9f8ef}.choice.wrong{border-color:#d94a43;background:#fff0ef}.panel,.card{box-shadow:0 8px 26px #163c5b0d}.tab{transition:background .15s}.stat{border:1px solid #e7edf3}.question{line-height:1.55}
 .notice{border-left:4px solid var(--gold);padding:12px;background:#fff8e7;border-radius:8px;margin:12px 0;font-size:14px}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{background:#e6edf4;color:#27465e}.tab.active{background:var(--navy);color:white}
 .tip{padding:13px;border:1px solid var(--line);border-radius:12px;margin:10px 0}.tip h3{font-size:16px;margin:0 0 4px}
@@ -24,7 +24,6 @@ footer{font-size:12px;color:var(--muted);margin-top:20px}
 </style></head><body>
 <header><h1>VBI NEW · Luyện thi bảo hiểm</h1><p>8 bộ đề · Ôn tập đáp án · Theo dõi câu cần học lại</p></header>
 <main>
-<div class="notice"><b>Lưu ý về dữ liệu:</b> Ứng dụng này lấy nội dung câu hỏi và đáp án từ các file đáp án bạn cung cấp. Bộ đề 04 giữ đủ 62 câu theo tài liệu đáp án bạn cung cấp. Câu hỏi và lựa chọn được trích từ PDF, đáp án lấy từ DOCX. Những câu chưa trích xuất được đủ lựa chọn sẽ được báo rõ, không tự tạo phương án.</div>
 <div class="tabs"><button class="tab active" data-view="study">Ôn tập từng câu</button><button class="tab" data-view="review">Câu cần ôn lại</button><button class="tab" data-view="tips">Mẹo chọn nhanh</button><button class="tab" data-view="stats">Thống kê</button></div>
 <div id="studyView" class="layout">
 <aside class="panel">
@@ -132,7 +131,7 @@ function render(){
 function renderGrid(){
  const query=$("search").value.toLowerCase().trim(), grid=$("questionGrid");grid.innerHTML="";
  const filtered=list().filter(x=>!query||x.q.toLowerCase().includes(query)||x.a.toLowerCase().includes(query));
- filtered.forEach(x=>{let b=document.createElement("button");b.textContent=x.n;b.className=(x.n===current?"current ":"")+(stateFor(setNo+":"+x.n).review?"review":"");b.title=stateFor(setNo+":"+x.n).review?"Cần ôn":"";b.onclick=()=>{current=x.n;order=list().map(y=>y.n);render()};grid.appendChild(b)});
+ filtered.forEach(x=>{let b=document.createElement("button");b.textContent=x.n;const k=setNo+":"+x.n;const picked=!!selected[k];const review=!!stateFor(k).review;b.className=(x.n===current?"current ":"")+(picked?"answered ":"")+(review?"review":"");b.title=[picked?"Đã chọn đáp án":"Chưa chọn đáp án",review?"Đã đánh dấu cần ôn":""].filter(Boolean).join(" · ");b.onclick=()=>{current=x.n;order=list().map(y=>y.n);render()};grid.appendChild(b)});
  if(query){$("counter").textContent=`Tìm thấy ${filtered.length} câu`; }
 }
 function renderReview(){
