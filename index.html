@@ -231,29 +231,51 @@ hr{border-color:#e8eef4!important}
  .set-choice small{display:block;font-size:10px;margin-top:2px}
 }
 </style>
-</head><body>
+<style id="vbi-separated-exam-and-study">
+#setsView{max-width:850px;margin:0 auto 18px}
+#studyView{max-width:1000px;margin:0 auto}
+#setsView .set-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#setsView .set-choice{padding:13px 14px}
+#setsView .set-choice strong{font-size:14px}
+#setsView .set-choice small{font-size:12px}
+@media(max-width:600px){
+ #setsView{padding:12px!important;margin-bottom:10px}
+ #setsView .set-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ #setsView .set-choice{padding:8px 7px}
+ #setsView .set-choice strong{font-size:12px}
+ #setsView .set-choice small{font-size:10px}
+ #studyView{padding:9px!important}
+}
+</style></head><body>
 <header><h1>VBI NEW · Luyện thi bảo hiểm</h1><p>8 bộ đề · Ôn tập đáp án · Theo dõi câu cần học lại</p></header>
 <main>
-<div class="tabs"><button class="tab active" data-view="study">Ôn tập từng câu</button><button class="tab" data-view="review">Câu cần ôn lại</button><button class="tab" data-view="tips">Mẹo chọn nhanh</button><button class="tab" data-view="stats">Thống kê</button></div>
-<div id="studyView" class="layout">
-<aside class="panel">
-<h2>Chọn bộ đề</h2><div id="setChoices" class="set-choices" role="group" aria-label="Chọn bộ đề"></div>
-
+<div class="tabs">
+<button class="tab active" data-view="sets">Chọn bộ đề</button>
+<button class="tab" data-view="study">Ôn tập câu hỏi</button>
+<button class="tab" data-view="review">Câu cần ôn lại</button>
+<button class="tab" data-view="tips">Mẹo chọn nhanh</button>
+<button class="tab" data-view="stats">Thống kê</button>
+</div>
+<section id="setsView" class="panel">
+<h2>Chọn bộ đề ôn tập</h2>
+<p class="muted">Chọn một bộ đề bên dưới, sau đó mở tab “Ôn tập câu hỏi” để bắt đầu.</p>
+<div id="setChoices" class="set-choices" role="group" aria-label="Chọn bộ đề"></div>
 <div class="stats"><div class="stat"><strong id="total">60</strong><span class="muted">Câu</span></div><div class="stat"><strong id="learned">0</strong><span class="muted">Đã xem</span></div><div class="stat"><strong id="marked">0</strong><span class="muted">Ôn lại</span></div></div>
 <div class="progress"><div id="progressBar"></div></div><p class="muted" id="progressText">0% đã ôn</p>
-<div class="row"><button class="secondary" id="shuffleBtn">Xáo trộn</button><button class="secondary" id="resetBtn">Bỏ đánh dấu bộ đề</button></div>
+<div class="row"><button class="secondary" id="shuffleBtn">Xáo trộn câu hỏi</button><button class="secondary" id="resetBtn">Bỏ đánh dấu bộ đề</button></div>
 <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
 <h2>Điều kiện mục tiêu</h2><p class="muted">Mốc tham chiếu bài thi: 50/60 điểm · 1 điểm/câu.</p>
-</aside>
-<section class="card">
+<button class="primary" id="startStudyBtn">Bắt đầu ôn tập →</button>
+</section>
+<section id="studyView" class="card hidden">
 <div class="between"><span class="qnum" id="qLabel">BỘ ĐỀ 01 · CÂU 1</span><span class="muted" id="sourceLabel"></span></div>
 <div class="question" id="questionText"></div>
 <div id="choices" class="choices"></div><div class="row"><button class="primary" id="checkBtn">Kiểm tra đáp án</button><button class="gold" id="markBtn">Đánh dấu cần ôn</button></div>
 <div class="answer hidden" id="answerBox"><strong>ĐÁP ÁN VÀ GIẢI THÍCH</strong><div id="answerText"></div><div id="feedbackDetail"></div></div>
 <div class="row between" style="margin-top:22px"><button class="secondary" id="prevBtn">← Câu trước</button><span class="muted" id="counter"></span><button class="primary" id="nextBtn">Câu tiếp →</button></div>
 <div class="navgrid" id="questionGrid"></div>
-<p class="muted">Mẹo học: đọc câu hỏi, tự trả lời trước khi bấm “Hiện đáp án”, sau đó đánh dấu câu chưa nhớ.</p>
-</section></div>
+<p class="muted">Chọn đáp án, đọc phản hồi rồi bấm “Câu tiếp →” để tiếp tục.</p>
+</section>
 <section id="reviewView" class="panel hidden"><h2>Danh sách câu cần ôn lại</h2><p class="muted">Chọn một câu để mở lại trong chế độ ôn tập.</p><div id="reviewList"></div></section>
 <section id="tipsView" class="panel hidden"><h2>Mẹo chọn nhanh đáp án</h2>
 <div class="tip"><h3>1. Đọc kỹ từ phủ định</h3>Gạch chân “không”, “ngoại trừ”, “sai”, “không thuộc phạm vi”. Câu phủ định dễ khiến chọn ngược đáp án.</div>
@@ -333,10 +355,11 @@ function init(){
 const set1TipSelect=document.getElementById("set1TipSelect");
 if(set1TipSelect&&BANK["1"]){set1TipSelect.innerHTML=BANK["1"].items.map(x=>'<option value="'+x.n+'">Câu '+x.n+'</option>').join("");set1TipSelect.addEventListener("change",set1RenderTip);set1RenderTip();}
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>switchView(b.dataset.view,b));
+ $("startStudyBtn").onclick=()=>switchView("study",document.querySelector('.tab[data-view="study"]'));
  order=list().map(x=>x.n);render();
 }
 function move(delta){let idx=order.indexOf(current);if(idx<0)idx=0;idx=Math.max(0,Math.min(order.length-1,idx+delta));current=order[idx];shown=false;render()}
-function switchView(view,btn){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));["study","review","tips","stats"].forEach(v=>$(v+"View").classList.toggle("hidden",v!==view));const extraTips=document.getElementById("set1TipsView");if(extraTips)extraTips.classList.toggle("hidden",view!=="tips");if(view==="review")renderReview();if(view==="stats")renderStats()}
+function switchView(view,btn){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));["sets","study","review","tips","stats"].forEach(v=>$(v+"View").classList.toggle("hidden",v!==view));const extraTips=document.getElementById("set1TipsView");if(extraTips)extraTips.classList.toggle("hidden",view!=="tips");if(view==="review")renderReview();if(view==="stats")renderStats()}
 let advanceTimer=null;
 const TIP_RULES=[
  {id:"negative",name:"Câu phủ định / tìm phương án sai",re:/phát biểu nào.*sai|phương án sai|chọn phương án sai|không phải|không được|không chịu|không có quyền|không thuộc|ngoại trừ|sai về/i,tip:"Khoanh từ phủ định trong câu hỏi trước. Kiểm tra từng phương án theo đúng chủ thể và điều kiện; chọn mệnh đề sai theo tài liệu, không chọn theo cảm giác."},
