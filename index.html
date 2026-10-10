@@ -238,7 +238,7 @@ hr{border-color:#e8eef4!important}
 <div id="studyView" class="layout">
 <aside class="panel">
 <h2>Chọn bộ đề</h2><div id="setChoices" class="set-choices" role="group" aria-label="Chọn bộ đề"></div>
-<label for="search">Tìm câu hỏi</label><input id="search" type="search" placeholder="Nhập từ khóa…">
+
 <div class="stats"><div class="stat"><strong id="total">60</strong><span class="muted">Câu</span></div><div class="stat"><strong id="learned">0</strong><span class="muted">Đã xem</span></div><div class="stat"><strong id="marked">0</strong><span class="muted">Ôn lại</span></div></div>
 <div class="progress"><div id="progressBar"></div></div><p class="muted" id="progressText">0% đã ôn</p>
 <div class="row"><button class="secondary" id="shuffleBtn">Xáo trộn</button><button class="secondary" id="resetBtn">Bỏ đánh dấu bộ đề</button></div>
@@ -324,7 +324,6 @@ function init(){
    });
  });
 
- $("search").addEventListener("input",renderGrid);
  $("checkBtn").onclick=checkAnswer;
  $("markBtn").onclick=()=>setState(key(),{review:!stateFor(key()).review});
  $("prevBtn").onclick=()=>move(-1);$("nextBtn").onclick=()=>move(1);
