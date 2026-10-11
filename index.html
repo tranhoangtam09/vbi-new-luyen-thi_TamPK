@@ -254,7 +254,12 @@ hr{border-color:#e8eef4!important}
  #nextBtn{justify-self:end!important}
  #prevBtn,#nextBtn{font-size:12px!important;padding:8px 10px!important;min-height:38px!important;white-space:nowrap!important}
 }
-</style><style id="vbi-hide-detailed-analysis-final">#feedbackDetail,.question-diagnosis,.feedback-detail{display:none!important}</style><style id="vbi-timed-random-exam">.exam-setup{border:1px solid #d8e6f4;background:#f7fbff;border-radius:14px;padding:14px;margin:18px 0}.exam-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.exam-fields label{font-size:13px;margin:0}.exam-fields input[type=number]{display:block;width:100%;padding:9px;border:1px solid #cbd8e4;border-radius:8px;background:white}.exam-fields .exam-random{grid-column:1/-1;display:flex;align-items:center;gap:8px}.exam-fields .exam-random input{width:17px;height:17px}.exam-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#eef6ff;border:1px solid #c9e0f7;border-radius:12px;padding:9px 12px;margin:12px 0}.exam-bar strong{font-size:20px;color:#103c68;font-variant-numeric:tabular-nums}.exam-bar strong.urgent{color:#b42318}.exam-result{background:#eff8f2;border:1px solid #9bd3ad;border-radius:12px;padding:14px;margin:12px 0}.exam-result strong{font-size:20px;color:#17683a}@media(max-width:600px){.exam-fields{grid-template-columns:1fr 1fr}.exam-bar{gap:6px;padding:8px;font-size:12px}.exam-bar strong{font-size:18px}.exam-bar button{padding:7px 9px;font-size:12px}}</style></head><body>
+</style><style id="vbi-hide-detailed-analysis-final">#feedbackDetail,.question-diagnosis,.feedback-detail{display:none!important}</style><style id="vbi-timed-random-exam">.exam-setup{border:1px solid #d8e6f4;background:#f7fbff;border-radius:14px;padding:14px;margin:18px 0}.exam-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.exam-fields label{font-size:13px;margin:0}.exam-fields input[type=number]{display:block;width:100%;padding:9px;border:1px solid #cbd8e4;border-radius:8px;background:white}.exam-fields .exam-random{grid-column:1/-1;display:flex;align-items:center;gap:8px}.exam-fields .exam-random input{width:17px;height:17px}.exam-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#eef6ff;border:1px solid #c9e0f7;border-radius:12px;padding:9px 12px;margin:12px 0}.exam-bar strong{font-size:20px;color:#103c68;font-variant-numeric:tabular-nums}.exam-bar strong.urgent{color:#b42318}.exam-result{background:#eff8f2;border:1px solid #9bd3ad;border-radius:12px;padding:14px;margin:12px 0}.exam-result strong{font-size:20px;color:#17683a}@media(max-width:600px){.exam-fields{grid-template-columns:1fr 1fr}.exam-bar{gap:6px;padding:8px;font-size:12px}.exam-bar strong{font-size:18px}.exam-bar button{padding:7px 9px;font-size:12px}}</style><style id="vbi-exam-unanswered-and-result">
+#nextUnansweredBtn{white-space:nowrap}
+.exam-result strong{display:block;font-size:clamp(22px,5vw,30px);margin-bottom:5px}
+.exam-result strong:contains("Bạn thật cùi bắp"){color:#b42318}
+@media(max-width:600px){#studyView .row.between{flex-wrap:wrap}#nextUnansweredBtn{font-size:12px;padding:8px 9px}}
+</style></head><body>
 <header><h1>VBI NEW · Luyện thi bảo hiểm</h1><p>8 bộ đề · Ôn tập đáp án · Theo dõi câu cần học lại</p></header>
 <main>
 <div class="tabs">
@@ -273,14 +278,14 @@ hr{border-color:#e8eef4!important}
 <div class="row"><button class="secondary" id="shuffleBtn">Xáo trộn câu hỏi</button><button class="secondary" id="resetBtn">Bỏ đánh dấu bộ đề</button></div>
 <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
 <h2>Điều kiện mục tiêu</h2><p class="muted">Mốc tham chiếu bài thi: 50/60 điểm · 1 điểm/câu.</p>
-<div class="exam-setup" id="examSetup"><h2>Thi thử có tính giờ</h2><p class="muted">Chọn số câu và thời gian. Có thể lấy ngẫu nhiên câu hỏi khác nhau ở mỗi lượt.</p><div class="exam-fields"><label for="examQuestionCount">Số câu thi<input id="examQuestionCount" type="number" min="1" max="62" value="30"></label><label for="examMinutes">Thời gian (phút)<input id="examMinutes" type="number" min="1" max="180" value="30"></label><label class="exam-random"><input id="examRandom" type="checkbox" checked> Lấy câu hỏi ngẫu nhiên</label></div><button class="primary" id="startExamBtn">Bắt đầu thi thử →</button></div><button class="primary" id="startStudyBtn">Bắt đầu ôn tập →</button>
+<div class="exam-setup" id="examSetup"><h2>Thi thử có tính giờ</h2><p class="muted">Chọn số câu và thời gian. Có thể lấy ngẫu nhiên câu hỏi khác nhau ở mỗi lượt.</p><div class="exam-fields"><label for="examQuestionCount">Số câu thi<input id="examQuestionCount" type="number" min="1" max="62" value="40"></label><label for="examMinutes">Thời gian (phút)<input id="examMinutes" type="number" min="1" max="180" value="30"></label><label class="exam-random"><input id="examRandom" type="checkbox" checked> Lấy câu hỏi ngẫu nhiên</label></div><button class="primary" id="startExamBtn">Bắt đầu thi thử →</button></div><button class="primary" id="startStudyBtn">Bắt đầu ôn tập →</button>
 </section>
 <section id="studyView" class="card hidden">
-<div class="between"><span class="qnum" id="qLabel">BỘ ĐỀ 01 · CÂU 1</span><span class="muted" id="sourceLabel"></span></div><div id="examBar" class="exam-bar hidden"><span id="examProgress">Đã chọn 0/30 câu</span><strong id="examTimer">30:00</strong><button class="danger" id="submitExamBtn">Nộp bài</button></div><div id="examResult" class="exam-result hidden"></div>
+<div class="between"><span class="qnum" id="qLabel">BỘ ĐỀ 01 · CÂU 1</span><span class="muted" id="sourceLabel"></span></div><div id="examBar" class="exam-bar hidden"><span id="examProgress">Đã chọn 0/40 câu</span><strong id="examTimer">30:00</strong><button class="danger" id="submitExamBtn">Nộp bài</button></div><div id="examResult" class="exam-result hidden"></div>
 <div class="question" id="questionText"></div>
 <div id="choices" class="choices"></div><div class="row"><button class="primary" id="checkBtn">Kiểm tra đáp án</button><button class="gold" id="markBtn">Đánh dấu cần ôn</button></div>
 <div class="answer hidden" id="answerBox"><strong>ĐÁP ÁN</strong><div id="answerText"></div></div>
-<div class="row between" style="margin-top:22px"><button class="secondary" id="prevBtn">← Câu trước</button><span class="muted" id="counter"></span><button class="primary" id="nextBtn">Câu tiếp →</button></div>
+<div class="row between" style="margin-top:22px"><button class="secondary" id="prevBtn">← Câu trước</button><span class="muted" id="counter"></span><button class="secondary" id="nextUnansweredBtn">Câu chưa làm ↓</button><button class="primary" id="nextBtn">Câu tiếp →</button></div>
 <div class="navgrid" id="questionGrid"></div>
 <p class="muted">Chọn đáp án, đọc phản hồi rồi bấm “Câu tiếp →” để tiếp tục.</p>
 </section>
@@ -378,6 +383,7 @@ function init(){
  $("prevBtn").onclick=()=>move(-1);$("nextBtn").onclick=()=>move(1);
  $("shuffleBtn").onclick=()=>{order=list().map(x=>x.n).sort(()=>Math.random()-.5);current=order[0]||1;render()};
  $("startExamBtn").onclick=startExam; $("submitExamBtn").onclick=()=>finishExam(false);
+ $("nextUnansweredBtn").onclick=goToUnanswered;
  $("resetBtn").onclick=()=>{if(confirm("Bỏ toàn bộ dấu cần ôn của bộ đề này?")){list().forEach(x=>{let k=setNo+":"+x.n;if(state[k])state[k].review=false});save();render()}};
 
  
@@ -388,7 +394,7 @@ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>switchView(b.dataset.
  order=list().map(x=>x.n);render();
 }
 function startExam(){
- const count=Math.max(1,Math.min(list().length,parseInt($("examQuestionCount").value,10)||30));
+ const count=Math.max(1,Math.min(list().length,parseInt($("examQuestionCount").value,10)||40));
  const minutes=Math.max(1,Math.min(180,parseInt($("examMinutes").value,10)||30));
  const pool=list().map(x=>x.n);if($("examRandom").checked)pool.sort(()=>Math.random()-.5);
  examOrder=pool.slice(0,count);order=examOrder.slice();current=order[0];selected={};examActive=true;examFinished=false;examSeconds=minutes*60;
@@ -407,10 +413,11 @@ function finishExam(timeUp){
  let correct=0,answered=0;
  examOrder.forEach(n=>{const item=list().find(x=>x.n===n),picked=selected[setNo+":"+n];if(picked)answered++;if(item&&picked&&item.correct_letter===picked)correct++});
  const result=$("examResult");result.classList.remove("hidden");
- result.innerHTML="<strong>"+(timeUp?"Hết giờ!":"Đã nộp bài")+"</strong><p>Kết quả: "+correct+"/"+examOrder.length+" câu đúng · Đã trả lời "+answered+"/"+examOrder.length+" câu.</p><button class='primary' id='reviewExamBtn'>Xem lại đáp án</button>";
+ const passed=correct>=30;result.innerHTML="<strong>"+(passed?"Bạn thật giỏi":"Bạn thật cùi bắp")+"</strong><p>"+(timeUp?"Hết giờ!":"Đã nộp bài")+" · Kết quả: "+correct+"/"+examOrder.length+" câu đúng · Đã trả lời "+answered+"/"+examOrder.length+" câu.</p><p>"+(passed?"Chúc mừng bạn đạt từ 30 câu đúng trở lên!":"Bạn cần đạt ít nhất 30 câu đúng để đậu. Hãy ôn lại và thử lần nữa!")+"</p><button class='primary' id='reviewExamBtn'>Xem lại đáp án</button>";
  $("reviewExamBtn").onclick=()=>render();
  render();
 }
+function goToUnanswered(){const remaining=order.filter(n=>!selected[setNo+":"+n]&&!(stateFor(setNo+":"+n).lastPicked));if(!remaining.length){alert("Bạn đã trả lời hết các câu trong lượt này.");return}const after=remaining.find(n=>order.indexOf(n)>order.indexOf(current));current=after??remaining[0];render()}
 function move(delta){let idx=order.indexOf(current);if(idx<0)idx=0;idx=Math.max(0,Math.min(order.length-1,idx+delta));current=order[idx];shown=false;render()}
 function switchView(view,btn){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b===btn));["sets","study","review","tips","stats"].forEach(v=>$(v+"View").classList.toggle("hidden",v!==view));const extraTips=document.getElementById("set1TipsView");if(extraTips)extraTips.classList.toggle("hidden",view!=="tips");if(view==="review")renderReview();if(view==="stats")renderStats()}
 let advanceTimer=null;
